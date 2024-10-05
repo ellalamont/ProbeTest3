@@ -62,18 +62,24 @@ my_pipeSummary$Week <- factor(my_pipeSummary$Week, levels = ordered_Week)
 
 
 
-# NOT DONE BELOW AS OF 10/2/24
+# 10/4/24: STARTED BELOW
 
 ###########################################################
 ############ IMPORT AND PROCESS ALL TPM VALUES ############
 
-my_tpm <- read.csv("Mtb.Expression.Gene.Data.TPM.csv")
+my_tpm <- read.csv("Mtb.Expression.Gene.Data.SCALED.TPM.csv")
 
 my_tpm <- my_tpm[,-ncol(my_tpm)] # remove the last column which is the Undetermined
 
 # Adjust the names so they are slightly shorter
 # names(my_tpm) <- gsub(x = names(my_tpm), pattern = "_2_2_ng_mL", replacement = "")
 names(my_tpm) <- gsub(x = names(my_tpm), pattern = "_S.*", replacement = "") # This regular expression removes the _S and everything after it (I think...)
+
+# Grab the metadata I added to my_pipeSummary
+my_metadata <- my_pipeSummary %>% select(SampleID, Sample_Type, Ra_cells, EukrRNADep, Week, ct, ttd, Hyb_Time, Hyb_Group, Probe, Probe_ng)
+
+# Adjust the metadata names so they are the same
+my_metadata$SampleID <- sub(x = my_metadata$SampleID, pattern = "_S.*", replacement = "")
 
 # add rownames to the tpm and metadata dataframes
 rownames(my_tpm) <- my_tpm[,1] # add the rownames
