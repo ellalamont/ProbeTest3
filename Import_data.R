@@ -87,3 +87,66 @@ my_tpm <- my_tpm[,-1] # Remove the old column of rownames
 rownames(my_metadata) <- my_metadata[,1] # add the rownames
 # my_metadata <- my_metadata[,-1] # Remove the old column of rownames
 
+
+###########################################################
+############## IMPORT BOBS DE DATA (SPUTUM) ############### 
+
+# 10/8/24: STARTED BELOW
+
+W0.S250754_ComparedTo_INDIGO.Broth <- read.delim("JOINED_BobAverages/MTb.MetaResults.S250754_vs_broth/S_250754_Probe_4A_50_S24.MTb.Meta.JOINED.txt")
+W0.S250754_ComparedTo_W2.S349941 <- read.delim("JOINED_BobAverages/MTb.MetaResults.S250754_vs_S349941/sputum_250754_W0.MTb.Meta.JOINED.txt")
+W0.S250754_ComparedTo_W0.S503557 <- read.delim("JOINED_BobAverages/MTb.MetaResults.S250754_vs_S503557/sputum_250754_W0.MTb.Meta.JOINED.txt")
+W0.S250754_ComparedTo_W4.S687338 <- read.delim("JOINED_BobAverages/MTb.MetaResults.S250754_vs_S687338/S_250754_Probe_4A_50_S24.MTb.Meta.JOINED.txt")
+W2.S349941_ComparedTo_W2.S575533 <- read.delim("JOINED_BobAverages/MTb.MetaResults.S349941_vs_S575533/S_349941_Probe_3D_25_S21.MTb.Meta.JOINED.txt")
+
+###########################################################
+################ MAKE A LIST OF ALL DFs ###################
+
+list_dfs <- list(W0.S250754_ComparedTo_INDIGO.Broth,
+                 W0.S250754_ComparedTo_W2.S349941, 
+                 W0.S250754_ComparedTo_W0.S503557, 
+                 W0.S250754_ComparedTo_W4.S687338, 
+                 W2.S349941_ComparedTo_W2.S575533)
+
+# Make a list of all the names
+df_names <- c("W0.S250754_ComparedTo_INDIGO.Broth",
+              "W0.S250754_ComparedTo_W2.S349941",
+              "W0.S250754_ComparedTo_W0.S503557", 
+              "W0.S250754_ComparedTo_W4.S687338", 
+              "W2.S349941_ComparedTo_W2.S575533")
+
+# Give the df list the correct df names
+names(list_dfs) <- df_names
+
+###########################################################
+############### ADD COLUMNS OF DE VALUES ##################
+
+# Make a new list to hold dataframes with extra columns
+list_dfs_2 <- list()
+
+ordered_DE <- c("significant down", "not significant", "significant up")
+
+# Add extra DE columns to each dataframe
+for (i in 1:length(list_dfs)) {
+  
+  current_df <- list_dfs[[i]]
+  current_df_name <- df_names[i]
+  
+  # Make the column pointing out which ones are differential expressed
+  current_df$DE <- ifelse(current_df$LOG2FOLD < -1 & current_df$AVG_PVALUE < 0.05, "significant down",
+                          ifelse(current_df$LOG2FOLD > 1 & current_df$AVG_PVALUE < 0.05, "significant up", "not significant"))
+  current_df$DE <- factor(current_df$DE, levels = ordered_DE)
+  
+  # Make the column with DE gene names for plotting on graph
+  current_df$DE_labels <- ifelse(current_df$DE != "not significant", current_df$GENE_NAME, NA)
+  
+  list_dfs_2[[current_df_name]] <- current_df
+  
+}
+  
+# View(list_dfs_2[[1]])
+
+
+
+
+
