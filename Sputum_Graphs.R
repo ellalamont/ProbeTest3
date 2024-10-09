@@ -10,7 +10,7 @@ my_sputum <- my_pipeSummary %>% filter(Sample_Type == "Sputum")
 my_plot_themes <- theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(legend.position = "right",legend.text=element_text(size=10),
-        legend.title = element_text(size = 12),
+        legend.title = element_text(size = 10),
         plot.title = element_text(size=10), 
         axis.title.x = element_text(size=10), 
         axis.text.x = element_text(angle = 0, size=10, vjust=0, hjust=0.5),
@@ -78,7 +78,74 @@ ggsave(WeekVsPercent_sputum,
 
 
 ###########################################################
-###################### CT CHANGES #######################
+############## WEEK CHANGES - NICER GRAPHS ################
+
+# Stop scientific notation
+# options(scipen = 999) 
+options(scipen = 0) # To revert back to default
+
+
+## Number reads 
+WeekVsReads_sputum2 <- my_sputum %>% 
+  
+  ggplot(aes(x = Week, y = N_Genomic)) + 
+  geom_point(aes(color = Sample_Type, shape = Week), size = 3) + 
+  scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) +  
+  scale_shape_manual(values=c(`0` = 15, `2` = 0, `4` = 3)) + 
+  
+  geom_text_repel(aes(label = P_Genomic), size= 2) + 
+  # geom_text(aes(label = Probe_ng), size= 1.5, nudge_x = 0.07) + 
+  
+  geom_hline(yintercept = 1000000, linetype = "dashed", alpha = 0.5) + 
+  
+  # scale_y_continuous(limits = c(0,4000000), breaks = seq(0, 4000000, 500000)) + 
+  
+  labs(title = "Sputum: Week vs number reads aligned to Mtb",
+       subtitle = "Label is percent of reads aligned to Mtb", 
+       x = "Weeks after start of antibiotics", 
+       y = "# reads aligning to Mtb genome") + 
+  
+  my_plot_themes
+
+WeekVsReads_sputum2
+
+ggsave(WeekVsReads_sputum2,
+       file = "WeekVsReads_sputum2.pdf",
+       path = "Figures/Sputum",
+       width = 6, height = 4, units = "in")
+
+## Percent reads 
+WeekVsPercent_sputum2 <- my_sputum %>% 
+  
+  ggplot(aes(x = Week, y = P_Genomic)) + 
+  geom_point(aes(color = Sample_Type, shape = Week), size = 3) + 
+  scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) +  
+  scale_shape_manual(values=c(`0` = 15, `2` = 0, `4` = 3)) + 
+  
+  geom_text_repel(aes(label = N_Genomic), size= 2) + 
+  # geom_text(aes(label = Probe_ng), size= 1.5, nudge_x = 0.07) + 
+  
+  # geom_hline(yintercept = 1000000, linetype = "dashed", alpha = 0.5) + 
+  
+  # scale_y_continuous(limits = c(0,4000000), breaks = seq(0, 4000000, 500000)) + 
+  
+  labs(title = "Sputum: Week vs percent reads aligned to Mtb",
+       subtitle = "Label is number of reads aligned to Mtb", 
+       x = "Weeks after start of antibiotics", 
+       y = "% reads aligning to Mtb genome") + 
+  
+  my_plot_themes
+
+WeekVsPercent_sputum2
+
+ggsave(WeekVsPercent_sputum2,
+       file = "WeekVsPercent_sputum2.pdf",
+       path = "Figures/Sputum",
+       width = 6, height = 4, units = "in")
+
+
+###########################################################
+######################## CT CHANGES #######################
 
 ## Number reads 
 ctVsReads_sputum <- my_sputum %>% 
