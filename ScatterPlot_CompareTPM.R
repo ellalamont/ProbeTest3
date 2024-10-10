@@ -90,3 +90,90 @@ ggsave(Scatter_THP1_3D_10vs25,
        file = "Scatter_THP1_3D_10vs25.pdf",
        path = "ScatterPlots_TPM",
        width = 6, height = 4, units = "in")
+
+# Compare THP1_1e6_2_Probe_3D_50 AND THP1_1e6_3_Probe_3D_25
+Scatter_THP1_3D_50vs25 <- my_tpm %>% 
+  ggplot(aes(x = THP1_1e6_2_Probe_3D_50, y = THP1_1e6_1_Probe_3D_100)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e6 cells H37Ra",
+       subtitle = NULL,
+       x = "TPM (Probe 3D @ 50ng)", y = "TPM (Probe 3D @ 25ng)") + 
+  stat_cor(method="pearson") + # add a correlation to the plot
+  my_plot_themes
+Scatter_THP1_3D_50vs25
+ggplotly(Scatter_THP1_3D_50vs25)
+
+ggsave(Scatter_THP1_3D_50vs25,
+       file = "Scatter_THP1_3D_50vs25.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+
+###########################################################
+################ THP1 COMPARE PROBE TYPE ##################
+
+# Compare THP1_1e6_2_Probe_3D_50 AND THP1_1e6_8_Probe_4A_50
+Scatter_THP1_50ng_Probe3Dvs4A <- my_tpm %>% 
+  ggplot(aes(x = THP1_1e6_2_Probe_3D_50, y = THP1_1e6_8_Probe_4A_50)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e6 cells H37Ra",
+       subtitle = NULL,
+       x = "TPM (Probe 3D @ 50ng)", y = "TPM (Probe 4A @ 50ng)") + 
+  stat_cor(method="pearson") + # add a correlation to the plot
+  my_plot_themes
+Scatter_THP1_50ng_Probe3Dvs4A
+# ggplotly(Scatter_THP1_50ng_Probe3Dvs4A)
+
+ggsave(Scatter_THP1_50ng_Probe3Dvs4A,
+       file = "Scatter_THP1_50ng_Probe3Dvs4A.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+
+###########################################################
+############# THP1 COMPARE EukrRNA DEPLETION ##############
+
+# Compare THP1_1e6_EukmRNADep_1_Probe_4A_50 AND THP1_1e6_8_Probe_4A_50
+Scatter_THP1_4A.50ng_EukrRNADepVsNot <- my_tpm %>% 
+  ggplot(aes(x = THP1_1e6_EukmRNADep_1_Probe_4A_50, y = THP1_1e6_8_Probe_4A_50)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e6 cells H37Ra",
+       subtitle = "THP1_1e6_EukmRNADep_1_Probe_4A_50 vs THP1_1e6_8_Probe_4A_50",
+       x = "TPM (with Eukaryotic rRNA depletion)", y = "TPM (no additional depletion)") + 
+  stat_cor(method="pearson") + # add a correlation to the plot
+  my_plot_themes
+Scatter_THP1_4A.50ng_EukrRNADepVsNot
+# ggplotly(Scatter_THP1_4A.50ng_EukrRNADepVsNot)
+
+ggsave(Scatter_THP1_4A.50ng_EukrRNADepVsNot,
+       file = "SScatter_THP1_4A.50ng_EukrRNADepVsNot.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+
+###########################################################
+############ THP1 COMPARE HYBRIDIZATION TIME ##############
+
+# Compare THP1_1e8_1_Probe_4A_25_16hr AND THP1_1e8_4_Probe_4A_25
+Scatter_THP1_4A.25ng_16hrVs4hr <- my_tpm %>% 
+  ggplot(aes(x = THP1_1e8_1_Probe_4A_25_16hr, y = THP1_1e8_4_Probe_4A_25)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e8 cells H37Ra",
+       subtitle = "THP1_1e8_1_Probe_4A_25_16hr vs THP1_1e8_4_Probe_4A_25",
+       x = "TPM (16 hr hybridization)", y = "TPM (4 hr hybridization)") + 
+  stat_cor(method="pearson") + # add a correlation to the plot
+  my_plot_themes
+Scatter_THP1_4A.25ng_16hrVs4hr
+# ggplotly(Scatter_THP1_4A.25ng_16hrVs4hr)
+
+ggsave(Scatter_THP1_4A.25ng_16hrVs4hr,
+       file = "Scatter_THP1_4A.25ng_16hrVs4hr.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+
+
+
+
+
+
