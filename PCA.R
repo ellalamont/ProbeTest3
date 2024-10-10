@@ -9,11 +9,11 @@ my_plot_themes <- theme_bw() +
   theme(legend.position = "right",legend.text=element_text(size=10),
         legend.title = element_text(size = 10),
         plot.title = element_text(size=10), 
-        axis.title.x = element_text(size=10), 
-        axis.text.x = element_text(angle = 0, size=10, vjust=0, hjust=0.5),
-        axis.title.y = element_text(size=10),
-        axis.text.y = element_text(size=10), 
-        plot.subtitle = element_text(size=10), 
+        axis.title.x = element_text(size=14), 
+        axis.text.x = element_text(angle = 0, size=14, vjust=0, hjust=0.5),
+        axis.title.y = element_text(size=14),
+        axis.text.y = element_text(size=14), 
+        plot.subtitle = element_text(size=9), 
         plot.margin = margin(10, 10, 10, 20))
 
 ###########################################################
@@ -139,21 +139,22 @@ my_PCA_THP1_df <- merge(my_PCA_THP1_df, my_metadata, by = "SampleID")
 
 fig_PC1vsPC2_THP1 <- my_PCA_THP1_df %>%
   ggplot(aes(x = PC1, y = PC2, color = Sample_Type, shape = Ra_cells, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
-  geom_point(size = 3) +
-  geom_text_repel(aes(label = Probe), color = "black", size = 2) + 
-  scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) + 
-  scale_shape_manual(values=c(1, 16)) +
+  geom_point(size = 5, color = "#FF7F00") +
+  geom_text_repel(aes(label = Probe), color = "black", size = 3, box.padding = 0.4) + 
+  # scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) + 
+  scale_shape_manual(values=c(1, 16), labels = c("1e6", "1e8")) +
   labs(title = "THP1 PCA plot ProbeTest3: PC1 vs PC2",
        x = paste0("PC1: ", summary_PCA_THP1[1,1], "%"),
-       y = paste0("PC2: ", summary_PCA_THP1[2,1], "%")) +
+       y = paste0("PC2: ", summary_PCA_THP1[2,1], "%"),
+       shape = "# H37Ra cells") +
   my_plot_themes
 fig_PC1vsPC2_THP1
-ggplotly(fig_PC1vsPC2_THP1)
+# ggplotly(fig_PC1vsPC2_THP1)
 
 ggsave(fig_PC1vsPC2_THP1,
        file = "THP1_PCA_PC1vsPC2.pdf",
        path = "PCA_Figures",
-       width = 9, height = 6, units = "in")
+       width = 6, height = 4, units = "in")
 
 
 ###########################################################
@@ -172,9 +173,9 @@ my_PCA_Sputum_df <- merge(my_PCA_Sputum_df, my_metadata, by = "SampleID")
 
 fig_PC1vsPC2_Sputum <- my_PCA_Sputum_df %>%
   ggplot(aes(x = PC1, y = PC2, color = Sample_Type, shape = Week, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
-  geom_point(size = 3) +
-  geom_text_repel(aes(label = Probe), color = "black", size = 2) + 
-  scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) + 
+  geom_point(size = 5, color = "#0072B2") +
+  # geom_text_repel(aes(label = Probe), color = "black", size = 2) + 
+  # scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) + 
   scale_shape_manual(values=c(15, 0, 3)) +
   labs(title = "Sputum PCA plot ProbeTest3: PC1 vs PC2",
        x = paste0("PC1: ", summary_PCA_Sputum[1,1], "%"),
@@ -186,5 +187,5 @@ ggplotly(fig_PC1vsPC2_Sputum)
 ggsave(fig_PC1vsPC2_Sputum,
        file = "Sputum_PCA_PC1vsPC2.pdf",
        path = "PCA_Figures",
-       width = 9, height = 6, units = "in")
+       width = 6, height = 4, units = "in")
 
