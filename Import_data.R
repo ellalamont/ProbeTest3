@@ -21,6 +21,7 @@ library(ggplotify) # To convert pheatmaps to ggplots
 library(corrplot)
 library(ggcorrplot)
 library(ggfortify) # To make pca plots with plotly
+library(scales) # To add commas to the y axis... scale_y_continuous(label=comma, )
 
 
 
@@ -40,6 +41,7 @@ c25 <- c(
 )
 c12 <- c("dodgerblue2", "#E31A1C", "green4", "#6A3D9A", "#FF7F00", "black", "palegreen2", "gray70", "maroon", "orchid1", "darkturquoise", "darkorange4") 
 c16 <- c("dodgerblue2", "#E31A1C", "green4", "#6A3D9A", "#FF7F00", "black","gold1", "#FB9A99", "#CAB2D6", "palegreen2", "gray70", "maroon", "orchid1", "blue1", "darkturquoise", "darkorange4") 
+c11 <- c("dodgerblue2", "#E31A1C", "green4", "#6A3D9A", "palegreen2", "gold1", "maroon", "orchid1", "darkturquoise", "darkorange4", "gray70")
 
 
 # Stop scientific notation

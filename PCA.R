@@ -1,6 +1,9 @@
 # PCA plot
 # 10/4/24
 
+# Look into ggbiplot for more PCA stuff??
+# https://cran.r-project.org/web/packages/ggbiplot/readme/README.html
+
 source("Import_data.R") # to get my_tpm
 
 # Plot basics
@@ -14,7 +17,12 @@ my_plot_themes <- theme_bw() +
         axis.title.y = element_text(size=14),
         axis.text.y = element_text(size=14), 
         plot.subtitle = element_text(size=9), 
-        plot.margin = margin(10, 10, 10, 20))
+        plot.margin = margin(10, 10, 10, 20),
+        panel.background = element_rect(fill='transparent'),
+        plot.background = element_rect(fill='transparent', color=NA),
+        legend.background = element_rect(fill='transparent'),
+        legend.box.background = element_blank()
+        )
 
 ###########################################################
 ######################## MAKE PCA #########################
@@ -131,7 +139,7 @@ ggsave(fig_PC1vsPC2_Saliva,
 ################### PCA JUST THP1 #########################
 
 my_PCA_THP1 <- prcomp(my_tpm_t2[grep("THP1", row.names(my_tpm_t2)),], scale = TRUE)
-summary_PCA_THP1 <- as.data.frame(summary(my_PCA_THP1)[["importance"]]['Proportion of Variance',]) * 100
+summary_PCA_THP1 <- format(round(as.data.frame(summary(my_PCA_THP1)[["importance"]]['Proportion of Variance',]) * 100, digits = 1), nsmall = 1)
 
 my_PCA_THP1_df <- as.data.frame(my_PCA_THP1$x[, 1:3]) # Extract the first 3 PCs
 my_PCA_THP1_df <- data.frame(SampleID = row.names(my_PCA_THP1_df), my_PCA_THP1_df)
@@ -146,7 +154,7 @@ fig_PC1vsPC2_THP1 <- my_PCA_THP1_df %>%
   labs(title = "THP1 PCA plot ProbeTest3: PC1 vs PC2",
        x = paste0("PC1: ", summary_PCA_THP1[1,1], "%"),
        y = paste0("PC2: ", summary_PCA_THP1[2,1], "%"),
-       shape = "# H37Ra cells") +
+       shape = "H37Ra cells \nspiked") +
   my_plot_themes
 fig_PC1vsPC2_THP1
 # ggplotly(fig_PC1vsPC2_THP1)
@@ -155,6 +163,30 @@ ggsave(fig_PC1vsPC2_THP1,
        file = "THP1_PCA_PC1vsPC2.pdf",
        path = "PCA_Figures",
        width = 6, height = 4, units = "in")
+
+# Changing the colors and shapes
+fig_PC1vsPC2_THP1 <- my_PCA_THP1_df %>%
+  ggplot(aes(x = PC1, y = PC2, shape = Ra_cells, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
+  geom_point(size = 6, fill = "#FF7F00", alpha = 0.8, stroke = 0.8) + # Size changed to 4 for the thumbnail
+  geom_text_repel(aes(label = "Not captured"), color = "black", size = 3, box.padding = 0.4, max.overlaps = 1) + # Label given for all because I know will only show up on the not captured ones because the rest overlap too much!
+  scale_shape_manual(values=c(24, 21), labels = c("1e6", "1e8")) +
+  labs(title = "THP1 PCA plot ProbeTest3: PC1 vs PC2",
+       x = paste0("PC1: ", summary_PCA_THP1[1,1], "%"),
+       y = paste0("PC2: ", summary_PCA_THP1[2,1], "%"),
+       shape = "H37Ra cells \nspiked") +
+  my_plot_themes
+fig_PC1vsPC2_THP1
+# ggplotly(fig_PC1vsPC2_THP1)
+
+ggsave(fig_PC1vsPC2_THP1,
+       file = "THP1_PCA_PC1vsPC2_v2.pdf",
+       path = "PCA_Figures",
+       width = 6, height = 5, units = "in")
+
+ggsave(fig_PC1vsPC2_THP1,
+       file = "THP1_PCA_PC1vsPC2_Thumbnail.pdf",
+       path = "PCA_Figures",
+       width = 4, height = 3, units = "in")
 
 
 ###########################################################
@@ -165,18 +197,20 @@ my_tpm_t2_Sputum <- my_tpm_t2[grep("S_", row.names(my_tpm_t2)),] # Had to make t
 my_tpm_t2_Sputum <- my_tpm_t2_Sputum %>% select_if(colSums(.) != 0)
 
 my_PCA_Sputum <- prcomp(my_tpm_t2_Sputum, scale = TRUE)
-summary_PCA_Sputum <- as.data.frame(summary(my_PCA_Sputum)[["importance"]]['Proportion of Variance',]) * 100
+summary_PCA_Sputum <- format(round(as.data.frame(summary(my_PCA_Sputum)[["importance"]]['Proportion of Variance',]) * 100, digits = 1), nsmall = 1) # Adding round and digits here to set number of digits after the decimal place.
+
 
 my_PCA_Sputum_df <- as.data.frame(my_PCA_Sputum$x[, 1:3]) # Extract the first 3 PCs
 my_PCA_Sputum_df <- data.frame(SampleID = row.names(my_PCA_Sputum_df), my_PCA_Sputum_df)
 my_PCA_Sputum_df <- merge(my_PCA_Sputum_df, my_metadata, by = "SampleID")
 
 fig_PC1vsPC2_Sputum <- my_PCA_Sputum_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = Sample_Type, shape = Week, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
-  geom_point(size = 5, color = "#0072B2") +
-  # geom_text_repel(aes(label = Probe), color = "black", size = 2) + 
+  ggplot(aes(x = PC1, y = PC2, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
+  geom_point(aes(shape = Week), alpha = 0.8, stroke = 0.8, size = 6, fill = "#0072B2") +
+  # geom_point(size = 5, color = "#0072B2") +
   # scale_color_manual(values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) + 
-  scale_shape_manual(values=c(15, 0, 3)) +
+  scale_shape_manual("Sputum \ncollection week", values = c(21,22,24)) +
+  # scale_shape_manual(values=c(15, 0, 3)) +
   labs(title = "Sputum PCA plot ProbeTest3: PC1 vs PC2",
        x = paste0("PC1: ", summary_PCA_Sputum[1,1], "%"),
        y = paste0("PC2: ", summary_PCA_Sputum[2,1], "%")) +

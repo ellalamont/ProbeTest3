@@ -258,6 +258,78 @@ ggsave(ttdVsPercent_sputum,
        width = 6, height = 4, units = "in")
 
 
+###########################################################
+################# P_GENOMIC VS G_GENOMIC ##################
 
+# Stop scientific notation
+options(scipen = 999) 
+options(scipen = 0) # To revert back to default
+
+set.seed(23)
+Scatter_SputumReads <- my_sputum %>% 
+  ggplot(aes(x = P_Genomic, y = N_Genomic)) +
+  geom_point(aes(shape = Week), alpha = 0.8, stroke = 0.8, size = 6, fill = "#0072B2") +
+  scale_shape_manual("Sputum \ncollection week", values = c(21,22,24)) +
+  geom_text_repel(aes(label = format(N_Genomic, big.mark = ",")), size= 2.5, box.padding = 0.4) + 
+  
+  geom_hline(yintercept = 1000000, linetype = "dashed", alpha = 0.5) + 
+  # scale_y_continuous(limits = c(0,4000000), breaks = seq(0, 4000000, 1000000)) +
+  # scale_x_continuous(limits = c(0,55), breaks = seq(0, 55, 10)) + 
+  
+  scale_y_continuous(limits = c(0,4000000), breaks = seq(0, 4000000, 1000000)) +
+  scale_x_continuous(limits = c(0,55), breaks = seq(0, 55, 10)) + 
+  
+  labs(title = "Sputum Number reads aligning to Mtb vs % Mtb reads",
+       subtitle = NULL,
+       x = "% of reads aligned to Mtb", y = "Number of reads aligned to Mtb") + 
+  my_plot_themes
+Scatter_SputumReads
+
+ggsave(Scatter_SputumReads,
+       file = "Scatter_SputumReads.pdf",
+       path = "Figures/Sputum",
+       width = 6, height = 4, units = "in")
+
+
+
+
+###########################################################
+################ SCATTER SPUTUM WITH MARM #################
+
+sputum_w_marm <- my_pipeSummary %>% filter(Sample_Type %in% c("Sputum", "Marmoset"))
+sputum_w_marm$Week <- as.character(sputum_w_marm$Week)
+sputum_w_marm[c("Week")][1:3,1] <- "Marm"
+ordered_Week2 <- c("0", "2", "4", "Marm")
+sputum_w_marm$Week <- factor(sputum_w_marm$Week, levels = ordered_Week2)
+
+set.seed(23)
+Scatter_Sputum_w_Marm_Reads <- sputum_w_marm %>% 
+  ggplot(aes(x = P_Genomic, y = N_Genomic)) +
+  geom_point(aes(fill = Sample_Type, shape = Week), alpha = 0.8, stroke = 0.8, size = 6) + 
+  scale_fill_manual("Sample Type", values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) +  
+  scale_shape_manual(values = c(21,22,24,23)) +
+  guides(fill = guide_legend(override.aes = list(shape=c(23, 21)))) + 
+  
+  geom_text_repel(aes(label = format(N_Genomic, big.mark = ",")), size= 3, box.padding = 0.4, segment.color = NA) + 
+  
+  geom_hline(yintercept = 1000000, linetype = "dashed", alpha = 0.5) + 
+  scale_y_continuous(limits = c(0,6500000), breaks = seq(0, 6500000, 1000000)) +
+  scale_x_continuous(limits = c(0,80), breaks = seq(0, 80, 10)) + 
+  
+  labs(title = "Sputum + Marm Number reads aligning to Mtb vs % Mtb reads",
+       subtitle = NULL,
+       x = "% of reads aligned to Mtb", y = "Number of reads aligned to Mtb") + 
+  my_plot_themes
+Scatter_Sputum_w_Marm_Reads
+
+ggsave(Scatter_Sputum_w_Marm_Reads,
+       file = "Scatter_Sputum_w_Marm_Reads.pdf",
+       path = "Figures/Sputum",
+       width = 8.5, height = 5, units = "in")
+
+ggsave(Scatter_Sputum_w_Marm_Reads,
+       file = "Scatter_Sputum_w_Marm_Reads_Thumbnail.pdf",
+       path = "Figures/Sputum",
+       width = 5, height = 3, units = "in")
 
 

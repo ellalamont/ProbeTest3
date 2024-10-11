@@ -134,19 +134,44 @@ ggsave(Scatter_THP1_50ng_Probe3Dvs4A,
 ############# THP1 COMPARE EukrRNA DEPLETION ##############
 
 # Compare THP1_1e6_EukmRNADep_1_Probe_4A_50 AND THP1_1e6_8_Probe_4A_50
-Scatter_THP1_4A.50ng_EukrRNADepVsNot <- my_tpm %>% 
+Scatter_THP1_1e6_4A.50ng_EukrRNADepVsNot <- my_tpm %>% 
   ggplot(aes(x = THP1_1e6_EukmRNADep_1_Probe_4A_50, y = THP1_1e6_8_Probe_4A_50)) + 
   geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
   labs(title = "THP1 with 1e6 cells H37Ra",
        subtitle = "THP1_1e6_EukmRNADep_1_Probe_4A_50 vs THP1_1e6_8_Probe_4A_50",
        x = "TPM (with Eukaryotic rRNA depletion)", y = "TPM (no additional depletion)") + 
+  
+  scale_y_continuous(limits = c(0,20000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(0,20000), breaks = seq(0, 20000, 5000)) +
+  
   stat_cor(method="pearson") + # add a correlation to the plot
   my_plot_themes
-Scatter_THP1_4A.50ng_EukrRNADepVsNot
-# ggplotly(Scatter_THP1_4A.50ng_EukrRNADepVsNot)
+Scatter_THP1_1e6_4A.50ng_EukrRNADepVsNot
+ggplotly(Scatter_THP1_1e6_4A.50ng_EukrRNADepVsNot)
 
-ggsave(Scatter_THP1_4A.50ng_EukrRNADepVsNot,
-       file = "SScatter_THP1_4A.50ng_EukrRNADepVsNot.pdf",
+ggsave(Scatter_THP1_1e6_4A.50ng_EukrRNADepVsNot,
+       file = "Scatter_THP1_1e6_4A.50ng_EukrRNADepVsNot.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+# Compare THP1_1e8_EukmRNADep_1_Probe_4A_50 AND THP1_1e8_8_Probe_4A_50
+Scatter_THP1_1e8_4A.50ng_EukrRNADepVsNot <- my_tpm %>% 
+  ggplot(aes(x = THP1_1e8_EukmRNADep_1_Probe_4A_50, y = THP1_1e8_8_Probe_4A_50)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e8 cells H37Ra",
+       subtitle = "THP1_1e8_EukmRNADep_1_Probe_4A_50 vs THP1_1e8_8_Probe_4A_50",
+       x = "TPM (with Eukaryotic rRNA depletion)", y = "TPM (no additional depletion)") + 
+  
+  scale_y_continuous(limits = c(0,20000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(0,20000), breaks = seq(0, 20000, 5000)) +
+
+  stat_cor(method="pearson") + # add a correlation to the plot
+  my_plot_themes
+Scatter_THP1_1e8_4A.50ng_EukrRNADepVsNot
+ggplotly(Scatter_THP1_1e8_4A.50ng_EukrRNADepVsNot)
+
+ggsave(Scatter_THP1_1e8_4A.50ng_EukrRNADepVsNot,
+       file = "Scatter_THP1_1e8_4A.50ng_EukrRNADepVsNot.pdf",
        path = "ScatterPlots_TPM",
        width = 6, height = 4, units = "in")
 
