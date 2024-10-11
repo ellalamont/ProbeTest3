@@ -145,6 +145,11 @@ my_PCA_THP1_df <- as.data.frame(my_PCA_THP1$x[, 1:3]) # Extract the first 3 PCs
 my_PCA_THP1_df <- data.frame(SampleID = row.names(my_PCA_THP1_df), my_PCA_THP1_df)
 my_PCA_THP1_df <- merge(my_PCA_THP1_df, my_metadata, by = "SampleID")
 
+# Add some columns to make the shapes work
+my_PCA_THP1_df$Probe_ng_chr <- as.character(my_PCA_THP1_df$Probe_ng)
+orderd_Probe_ng_chr <- c("0", "10", "15.4", "16.4", "25", "50", "100")
+my_PCA_THP1_df$Probe_ng_chr <- factor(my_PCA_THP1_df$Probe_ng_chr, levels = orderd_Probe_ng_chr)
+
 fig_PC1vsPC2_THP1 <- my_PCA_THP1_df %>%
   ggplot(aes(x = PC1, y = PC2, color = Sample_Type, shape = Ra_cells, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
   geom_point(size = 5, color = "#FF7F00") +
@@ -178,8 +183,24 @@ fig_PC1vsPC2_THP1 <- my_PCA_THP1_df %>%
 fig_PC1vsPC2_THP1
 # ggplotly(fig_PC1vsPC2_THP1)
 
+
+# Changing the colors and shapes some more.....
+fig_PC1vsPC2_THP1 <- my_PCA_THP1_df %>%
+  ggplot(aes(x = PC1, y = PC2, shape = Ra_cells, label = Probe, label2 = Probe_ng, label3 = Hyb_Time)) + 
+  geom_point(aes(shape = Ra_cells, fill = Probe_ng_chr), alpha = 0.8, stroke = 0.8, size = 6) + # Size changed to 4 for the thumbnail
+  geom_text_repel(aes(label = "Not captured"), color = "black", size = 3, box.padding = 0.4, max.overlaps = 1) + # Label given for all because I know will only show up on the not captured ones because the rest overlap too much!
+  scale_shape_manual("H37Ra cells \nspiked", values=c(24, 21), labels = c("1e6", "1e8")) +
+  guides(fill = guide_legend(override.aes = list(shape = c(21, 21, 21, 21, 21, 21, 21)))) + 
+  scale_fill_manual(values = c7) + 
+  labs(title = "THP1 PCA plot ProbeTest3: PC1 vs PC2",
+       x = paste0("PC1: ", summary_PCA_THP1[1,1], "%"),
+       y = paste0("PC2: ", summary_PCA_THP1[2,1], "%")) +
+  my_plot_themes
+fig_PC1vsPC2_THP1
+# ggplotly(fig_PC1vsPC2_THP1)
+
 ggsave(fig_PC1vsPC2_THP1,
-       file = "THP1_PCA_PC1vsPC2_v2.pdf",
+       file = "THP1_PCA_PC1vsPC2_v3.pdf",
        path = "PCA_Figures",
        width = 6, height = 5, units = "in")
 

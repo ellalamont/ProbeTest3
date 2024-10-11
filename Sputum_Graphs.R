@@ -17,7 +17,12 @@ my_plot_themes <- theme_bw() +
         axis.title.y = element_text(size=14),
         axis.text.y = element_text(size=14), 
         plot.subtitle = element_text(size=9), 
-        plot.margin = margin(10, 10, 10, 20))
+        plot.margin = margin(10, 10, 10, 20),
+        panel.background = element_rect(fill='transparent'),
+        plot.background = element_rect(fill='transparent', color=NA),
+        legend.background = element_rect(fill='transparent'),
+        legend.box.background = element_blank()
+  )
 
 
 ###########################################################
@@ -142,6 +147,60 @@ ggsave(WeekVsPercent_sputum2,
        file = "WeekVsPercent_sputum2.pdf",
        path = "Figures/Sputum",
        width = 6, height = 4, units = "in")
+
+
+###########################################################
+###### WEEK CHANGES - EVEN NICER GRAPHS w/ MARM ###########
+
+# Stop scientific notation
+# options(scipen = 999) 
+options(scipen = 0) # To revert back to default
+
+# For including the marmoset samples
+sputum_w_marm <- my_pipeSummary %>% filter(Sample_Type %in% c("Sputum", "Marmoset"))
+sputum_w_marm$Week <- as.character(sputum_w_marm$Week)
+sputum_w_marm[c("Week")][1:3,1] <- "Marmoset"
+ordered_Week2 <- c("0", "2", "4", "Marmoset")
+sputum_w_marm$Week <- factor(sputum_w_marm$Week, levels = ordered_Week2)
+ordered_Sample_Type <- c("Sputum", "Marmoset")
+sputum_w_marm$Sample_Type <- factor(sputum_w_marm$Sample_Type, levels = ordered_Sample_Type)
+
+## Number reads 
+WeekVsReads_sputum3 <- sputum_w_marm %>% 
+  
+  ggplot(aes(x = Week, y = N_Genomic)) + 
+  geom_point(aes(fill = Sample_Type,), shape = 21, size = 6, alpha = 0.8, stroke = 0.8) + 
+  scale_fill_manual("Sample type", values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) +  
+  # scale_shape_manual(values=c(`0` = 15, `2` = 0, `4` = 3)) + 
+  
+  geom_text_repel(aes(label = format(N_Genomic, big.mark = ",")), size= 3, box.padding = 0.4, segment.color = NA) + 
+  # geom_text(aes(label = Probe_ng), size= 1.5, nudge_x = 0.07) + 
+  
+  geom_hline(yintercept = 1000000, linetype = "dashed", alpha = 0.5) + 
+  
+  facet_grid(~ Sample_Type, scales = "free", space = "free") + 
+  
+  scale_y_continuous(limits = c(0,6500000), breaks = seq(0, 6500000, 1000000)) +
+  
+  labs(title = "Sputum: Week vs number reads aligned to Mtb",
+       subtitle = "Label is percent of reads aligned to Mtb", 
+       x = "Weeks after start of antibiotics", 
+       y = "# reads aligning to Mtb genome") + 
+  
+  my_plot_themes
+
+WeekVsReads_sputum3
+
+ggsave(WeekVsReads_sputum3,
+       file = "WeekVsReads_sputum_w_marm3.pdf",
+       path = "Figures/Sputum",
+       width = 8.5, height = 5, units = "in")
+
+ggsave(WeekVsReads_sputum3,
+       file = "WeekVsReads_sputum_w_marm3_Thumbnail.pdf",
+       path = "Figures/Sputum",
+       width = 5, height = 3, units = "in")
+
 
 
 ###########################################################
