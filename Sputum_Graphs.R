@@ -9,7 +9,7 @@ my_sputum <- my_pipeSummary %>% filter(Sample_Type == "Sputum")
 # Plot basics
 my_plot_themes <- theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-  theme(legend.position = "right",legend.text=element_text(size=10),
+  theme(legend.position = "none",legend.text=element_text(size=10),
         legend.title = element_text(size = 10),
         plot.title = element_text(size=10), 
         axis.title.x = element_text(size=14), 
@@ -200,6 +200,38 @@ ggsave(WeekVsReads_sputum3,
        file = "WeekVsReads_sputum_w_marm3_Thumbnail.pdf",
        path = "Figures/Sputum",
        width = 5, height = 3, units = "in")
+
+# Save the same but without the marm
+WeekVsReads_sputum4 <- my_sputum %>% 
+  
+  ggplot(aes(x = Week, y = N_Genomic)) + 
+  geom_point(aes(fill = Sample_Type,), shape = 21, size = 6, alpha = 0.8, stroke = 0.8) + 
+  scale_fill_manual("Sample type", values = c(`Marmoset` = "#CAB2D6", `Sputum` = "#0072B2", `Saliva` = "#009E73", `THP1` = "#FF7F00")) +  
+  # scale_shape_manual(values=c(`0` = 15, `2` = 0, `4` = 3)) + 
+  
+  geom_text_repel(aes(label = format(N_Genomic, big.mark = ",")), size= 3, box.padding = 0.4, segment.color = NA) + 
+  # geom_text(aes(label = Probe_ng), size= 1.5, nudge_x = 0.07) + 
+  
+  geom_hline(yintercept = 1000000, linetype = "dashed", alpha = 0.5) + 
+  
+  facet_grid(~ Sample_Type, scales = "free", space = "free") + 
+  
+  scale_y_continuous(limits = c(0,6500000), breaks = seq(0, 6500000, 1000000)) +
+  
+  labs(title = "Sputum: Week vs number reads aligned to Mtb",
+       subtitle = "Label is percent of reads aligned to Mtb", 
+       x = "Weeks after start of antibiotics", 
+       y = "# reads aligning to Mtb genome") + 
+  
+  my_plot_themes
+
+WeekVsReads_sputum4
+
+ggsave(WeekVsReads_sputum4,
+       file = "WeekVsReads_sputum_only.pdf",
+       path = "Figures/Sputum",
+       width = 7, height = 5, units = "in")
+
 
 
 
