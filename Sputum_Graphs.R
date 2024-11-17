@@ -216,7 +216,7 @@ WeekVsReads_sputum4 <- my_sputum %>%
   
   facet_grid(~ Sample_Type, scales = "free", space = "free") + 
   
-  scale_y_continuous(limits = c(0,6500000), breaks = seq(0, 6500000, 1000000)) +
+  scale_y_continuous(limits = c(0,5000000), breaks = seq(0, 5000000, 1000000)) +
   
   labs(title = "Sputum: Week vs number reads aligned to Mtb",
        subtitle = "Label is percent of reads aligned to Mtb", 
@@ -231,6 +231,11 @@ ggsave(WeekVsReads_sputum4,
        file = "WeekVsReads_sputum_only.pdf",
        path = "Figures/Sputum",
        width = 7, height = 5, units = "in")
+
+ggsave(WeekVsReads_sputum4,
+       file = "WeekVsReads_sputum_only_Thumbnail.pdf",
+       path = "Figures/Sputum",
+       width = 4, height = 3, units = "in")
 
 
 
