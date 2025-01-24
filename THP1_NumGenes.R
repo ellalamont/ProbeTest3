@@ -50,6 +50,7 @@ THP1_10Genes <- my_THP1 %>%
   guides(fill = guide_legend(override.aes = list(shape = c(21, 21, 21, 21, 21, 21, 21)))) + 
   # geom_text_repel(aes(label = format(AtLeast.10.Reads, big.mark = ",")), size= 2.5, box.padding = 0.4, segment.color = NA, max.overlaps = Inf) + 
   scale_y_continuous(limits = c(0,4499), breaks = seq(0, 4500, 500)) + 
+  scale_x_discrete(labels=c("None" = "Not captured", "1" = "Probe A", "3A" = "Probe B", "3D" = "Probe C", "4A" = "Probe D")) +
   labs(title = "Spiked THP1 # genes aligned to Mtb with at least 10 TPM",
        subtitle = NULL,
        x = "Probe prep", 
