@@ -151,5 +151,30 @@ for (i in 1:length(list_dfs)) {
 
 
 
+###########################################################
+################### IMPORT MARK's DATA ####################
+# 11/26/24
+
+# Import the tpm
+mark_tpm <- read.csv("DataFromMark/Data/Updated.Mtb.Expression.Gene.Data.TPM.csv")
+# add rownames to the tpm and metadata dataframes
+rownames(mark_tpm) <- mark_tpm[,1] # add the rownames
+mark_tpm <- mark_tpm[,-1] # Remove the old column of rownames
+
+# Import the metatdata
+mark_metadata <- read.csv("DataFromMark/Data/Annotation_including_new_timecourse_batch.csv")
+
+# I think I just need the GroupStrain the Mimic_timepoint and Batch
+# GroupStrain should be the same as Sample_Type
+colnames(mark_metadata)[colnames(mark_metadata) == "GroupStrain"] ="Sample_Type"
+mark_metadata_2 <- mark_metadata %>% select(SampleID, Sample_Type, Batch)
+
+# Merge the TPMs
+combined_TPM <- merge(my_tpm, mark_tpm, by = "row.names", all = T)
+rownames(combined_TPM) <- combined_TPM[,1] # add the rownames
+combined_TPM <- combined_TPM[,-1] # Remove the old column of rownames
+
+# Merge the metadatas
+combined_metadata <- merge(my_metadata, mark_metadata_2, all = T)
 
 

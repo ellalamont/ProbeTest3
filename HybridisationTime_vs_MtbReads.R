@@ -79,11 +79,6 @@ ggsave(HybTimeVsPercent_paired,
 
 
 
-
-
-
-
-
 # GGPAIRED BELOW... NOT WORKING AS WELL
 
 ###########################################################

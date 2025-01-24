@@ -219,7 +219,7 @@ WeekVsReads_sputum4 <- my_sputum %>%
   scale_y_continuous(limits = c(0,5000000), breaks = seq(0, 5000000, 1000000)) +
   
   labs(title = "Sputum: Week vs number reads aligned to Mtb",
-       subtitle = "Label is percent of reads aligned to Mtb", 
+       subtitle = "Label is number of reads aligned to Mtb", 
        x = "Weeks after start of antibiotics", 
        y = "# reads aligning to Mtb") + 
   
