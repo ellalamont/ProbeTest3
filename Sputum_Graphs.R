@@ -221,7 +221,7 @@ WeekVsReads_sputum4 <- my_sputum %>%
   labs(title = "Sputum: Week vs number reads aligned to Mtb",
        subtitle = "Label is percent of reads aligned to Mtb", 
        x = "Weeks after start of antibiotics", 
-       y = "# reads aligning to Mtb genome") + 
+       y = "# reads aligning to Mtb") + 
   
   my_plot_themes
 
