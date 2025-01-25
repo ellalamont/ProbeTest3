@@ -9,7 +9,7 @@ source("Import_data.R") # to get my_tpm
 # Plot basics
 my_plot_themes <- theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-  theme(legend.position = "right",legend.text=element_text(size=10),
+  theme(legend.position = "none",legend.text=element_text(size=10),
         legend.title = element_text(size = 10),
         plot.title = element_text(size=10), 
         axis.title.x = element_text(size=14), 
@@ -203,6 +203,11 @@ ggsave(fig_PC1vsPC2_THP1,
        file = "THP1_PCA_PC1vsPC2_v3.pdf",
        path = "PCA_Figures",
        width = 6, height = 5, units = "in")
+
+ggsave(fig_PC1vsPC2_THP1,
+       file = "THP1_PCA_PC1vsPC2_v4.pdf",
+       path = "PCA_Figures",
+       width = 6, height = 4, units = "in")
 
 ggsave(fig_PC1vsPC2_THP1,
        file = "THP1_PCA_PC1vsPC2_Thumbnail.pdf",
