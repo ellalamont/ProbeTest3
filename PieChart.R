@@ -89,7 +89,7 @@ ggsave(PieChart_2,
        width = 6, height = 4, units = "in")
 
 PieChart_3 <- my_pipeSummary_ReadCount %>% 
-  filter(SampleID %in% c("THP1_1e8_2_Probe_4A_10_16hr_S7", "THP1_1e8_6_Probe_None_S39")) %>% 
+  filter(SampleID %in% c("THP1_1e8_2_Probe_4A_10_16hr_S7", "THP1_1e8_6_Probe_None_S39")) %>%
   mutate(SampleID = factor(SampleID, levels = c("THP1_1e8_6_Probe_None_S39", "THP1_1e8_2_Probe_4A_10_16hr_S7"))) %>% 
   arrange(SampleID, desc(Number)) %>%  # Need this so the numbers go to the correct slices
   group_by(SampleID) %>% # Need this or it won't be a round pie! 
