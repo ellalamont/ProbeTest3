@@ -13,6 +13,12 @@ my_THP1$Probe_ng_chr <- as.character(my_THP1$Probe_ng)
 orderd_Probe_ng_chr <- c("0", "10", "15.4", "16.4", "25", "50", "100")
 my_THP1$Probe_ng_chr <- factor(my_THP1$Probe_ng_chr, levels = orderd_Probe_ng_chr)
 
+# Log10 transform the data
+my_THP1_Log10 <- my_tpm %>% 
+  mutate(across(where(is.numeric), ~ .x + 1)) %>% # Add 1 to all the values
+  mutate(across(where(is.numeric), ~ log10(.x))) # Log transform the values
+
+
 # Plot basics
 my_plot_themes <- theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +

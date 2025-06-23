@@ -8,6 +8,12 @@
 source("Import_data.R") # to get my_tpm
 my_tpm$Gene <- rownames(my_tpm)
 
+# Log10 transform the data
+my_THP1_Log10 <- my_tpm %>% 
+  mutate(across(where(is.numeric), ~ .x + 1)) %>% # Add 1 to all the values
+  mutate(across(where(is.numeric), ~ log10(.x))) # Log transform the values
+
+
 # Plot basics
 my_plot_themes <- theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
@@ -59,7 +65,7 @@ ggsave(Scatter_SalivaVsNone,
 
 # Compare THP1_1e6_1_Probe_3D_100 AND THP1_1e6_3_Probe_3D_25
 Scatter_THP1_3D_100vs25 <- my_tpm %>% 
-  ggplot(aes(x = THP1_1e6_1_Probe_3D_100, y = THP1_1e6_1_Probe_3D_100)) + 
+  ggplot(aes(x = THP1_1e6_1_Probe_3D_100, y = THP1_1e6_3_Probe_3D_25)) + 
   geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
   labs(title = "THP1 with 1e6 cells H37Ra",
        subtitle = NULL,
@@ -105,6 +111,58 @@ ggplotly(Scatter_THP1_3D_50vs25)
 
 ggsave(Scatter_THP1_3D_50vs25,
        file = "Scatter_THP1_3D_50vs25.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+
+###########################################################
+####### THP1 COMPARE PROBE CONC - LOG TRANSFORMED #########
+
+# Compare THP1_1e6_1_Probe_3D_100 AND THP1_1e6_3_Probe_3D_25
+Log10_Scatter_THP1_3D_100vs25 <- my_THP1_Log10 %>% 
+  ggplot(aes(x = THP1_1e6_1_Probe_3D_100, y = THP1_1e6_3_Probe_3D_25)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e6 cells H37Ra",
+       subtitle = NULL,
+       x = "Log10(TPM+1) (Probe 3D @ 100ng)", y = "Log10(TPM+1) (Probe 3D @ 25ng)") +
+  stat_cor(method="pearson") + # add a correlation to the plot
+  geom_abline(slope = 1, intercept = 0, linetype = "solid", color = "blue") + 
+  my_plot_themes
+Log10_Scatter_THP1_3D_100vs25
+ggsave(Log10_Scatter_THP1_3D_100vs25,
+       file = "Log10_Scatter_THP1_3D_100vs25.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+# Compare THP1_1e6_1_Probe_3D_100 AND THP1_1e6_4_Probe_3D_10
+Log10_Scatter_THP1_3D_100vs10 <- my_THP1_Log10 %>% 
+  ggplot(aes(x = THP1_1e6_1_Probe_3D_100, y = THP1_1e6_4_Probe_3D_10)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e6 cells H37Ra",
+       subtitle = NULL,
+       x = "Log10(TPM+1) (Probe 3D @ 100ng)", y = "Log10(TPM+1) (Probe 3D @ 10ng)") +
+  stat_cor(method="pearson") + # add a correlation to the plot
+  geom_abline(slope = 1, intercept = 0, linetype = "solid", color = "blue") + 
+  my_plot_themes
+Log10_Scatter_THP1_3D_100vs10
+ggsave(Log10_Scatter_THP1_3D_100vs10,
+       file = "Log10_Scatter_THP1_3D_100vs10.pdf",
+       path = "ScatterPlots_TPM",
+       width = 6, height = 4, units = "in")
+
+# Compare THP1_1e6_2_Probe_3D_50 AND THP1_1e6_4_Probe_3D_10
+Log10_Scatter_THP1_3D_50vs10 <- my_THP1_Log10 %>% 
+  ggplot(aes(x = THP1_1e6_2_Probe_3D_50, y = THP1_1e6_4_Probe_3D_10)) + 
+  geom_point(aes(text = Gene), alpha = 1, size = 2, color = "black") +
+  labs(title = "THP1 with 1e6 cells H37Ra",
+       subtitle = NULL,
+       x = "Log10(TPM+1) (Probe 3D @ 50ng)", y = "Log10(TPM+1) (Probe 3D @ 10ng)") + 
+  stat_cor(method="pearson") + # add a correlation to the plot
+  geom_abline(slope = 1, intercept = 0, linetype = "solid", color = "blue") + 
+  my_plot_themes
+Log10_Scatter_THP1_3D_50vs10
+ggsave(Log10_Scatter_THP1_3D_50vs10,
+       file = "Log10_Scatter_THP1_3D_50vs10.pdf",
        path = "ScatterPlots_TPM",
        width = 6, height = 4, units = "in")
 
