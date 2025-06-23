@@ -64,5 +64,27 @@ ggsave(THP1_10Genes,
        width = 8, height = 5, units = "in")
 
 
+###########################################################
+############## COMPARE NUMBER OF GENES (100) ###############
 
+THP1_100Genes <- my_THP1 %>% 
+  ggplot(aes(x = Probe, y = AtLeast.100.Reads, text = SampleID)) + 
+  geom_point(aes(shape = Ra_cells, fill = Probe_ng_chr), alpha = 0.8, stroke = 0.8, size = 6) +
+  scale_shape_manual("H37Ra cells \nspiked", values=c(24, 21), labels = c("1e6", "1e8")) +
+  scale_fill_manual("ng of probe", values = c7) + 
+  guides(fill = guide_legend(override.aes = list(shape = c(21, 21, 21, 21, 21, 21, 21)))) + 
+  # geom_text_repel(aes(label = format(AtLeast.10.Reads, big.mark = ",")), size= 2.5, box.padding = 0.4, segment.color = NA, max.overlaps = Inf) + 
+  scale_y_continuous(limits = c(0,4499), breaks = seq(0, 4500, 500)) + 
+  scale_x_discrete(labels=c("None" = "Not captured", "1" = "Probe A", "3A" = "Probe B", "3D" = "Probe C", "4A" = "Probe D")) +
+  labs(title = "Spiked THP1 # genes aligned to Mtb with at least 100 transcripts",
+       subtitle = NULL,
+       x = "Probe prep", 
+       y = "# genes with at least 100 reads") + 
+  geom_hline(yintercept = 4499/2, linetype = "dashed", alpha = 0.5) + 
+  my_plot_themes
+THP1_100Genes
+ggsave(THP1_100Genes,
+       file = "Scatter_THP1_Num100Genes_v1.pdf",
+       path = "Figures",
+       width = 8, height = 5, units = "in")
 
