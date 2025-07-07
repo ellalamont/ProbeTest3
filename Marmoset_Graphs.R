@@ -52,10 +52,10 @@ WeekVsReads_marm <- my_marm %>%
 
 WeekVsReads_marm
 
-ggsave(WeekVsReads_marm,
-       file = "WeekVsReads_marm.pdf",
-       path = "Figures/Marmoset",
-       width = 6, height = 4, units = "in")
+# ggsave(WeekVsReads_marm,
+#        file = "WeekVsReads_marm.pdf",
+#        path = "Figures/Marmoset",
+#        width = 6, height = 4, units = "in")
 
 ## Percent reads 
 WeekVsPercent_marm <- my_marm %>% 
